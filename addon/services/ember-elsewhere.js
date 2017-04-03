@@ -24,7 +24,11 @@ export default Service.extend({
   },
 
   _schedule() {
-    run.scheduleOnce('afterRender', this, this._process);
+    if (this.get('fastboot.isFastBoot')) {
+      this._process();
+    } else {
+      run.scheduleOnce('afterRender', this, this._process);
+    }
   },
 
   _process() {
