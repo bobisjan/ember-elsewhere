@@ -2,6 +2,14 @@ import Ember from 'ember';
 const { Service, run, Object: EmObject, A: emArray } = Ember;
 
 export default Service.extend({
+  fastboot: Ember.computed(function() {
+    return Ember.getOwner(this).lookup('service:fastboot');
+  }),
+
+  isFastBoot: Ember.computed('fastboot', function() {
+    return this.get('fastboot.isFastBoot');
+  }),
+
   init() {
     this._super();
     this.set('actives', EmObject.create());
@@ -24,7 +32,7 @@ export default Service.extend({
   },
 
   _schedule() {
-    if (this.get('fastboot.isFastBoot')) {
+    if (this.get('isFastBoot')) {
       this._process();
     } else {
       run.scheduleOnce('afterRender', this, this._process);
